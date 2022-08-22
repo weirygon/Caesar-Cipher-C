@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-int syntax(char *argv);
+int syntax(char **argv);
+int isNumber(char *argv);
 void error(char *argv);
 
 void main(int argc, char *argv[]){
@@ -17,7 +18,7 @@ void main(int argc, char *argv[]){
 
 	FILE *file_1, *file_2;
 
-	int opt = syntax(*(argv));
+	int opt = syntax((argv));
 
 	switch(opt){
 		case 1:
@@ -34,27 +35,46 @@ void main(int argc, char *argv[]){
 
 }
 
-int syntax(char *argv){
+int syntax(char **argv){
 
-	//printf("> %s", (*argv));
+	
+	if( !(strcmp(argv[1], "-c")) ){
 
+		if( !(strcmp(argv[2], "-k")) || !(strcmp(argv[2], "-n"))){
+			
+			if(isNumber(argv[3]))
+				return 1;
+			else
+				return 0;
 
-	if( !(strcmp((argv+1), "-c")) ){
-
-		if( !(strcmp((argv+2), "-k")) || !(strcmp((argv+2), "-n"))){
-			printf("43\n");
 		}
 	
-	}else if( !(strcmp((argv+1), "-d")) ){
+	}else if( !(strcmp(argv[1], "-d")) ){
 
-		if( !(strcmp((argv+2), "-k")) || !(strcmp((argv+2), "-n"))){
-			printf("49\n");
+		if( !(strcmp(argv[2], "-k")) || !(strcmp(argv[2], "-n"))){
+			
+			if(isNumber(argv[3]))
+				return 1;
+			else
+				return 0;
 
 		}
 
 	}else
 		return -1;
 
+
+}
+
+int isNumber(char *argv){
+
+	for(int i=0; argv[i]!= 0; i++){
+
+		if(argv[i] < 48 || argv[i] > 57)
+			return 0;
+	}
+
+	return 1;
 
 }
 
