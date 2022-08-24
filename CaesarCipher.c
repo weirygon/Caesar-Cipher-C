@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-void encrypt(FILE *in, FILE *out);
+int convertInt(char *argv);
+void encrypt(FILE *in, int key, FILE *out);
 int isNumber(char *argv);
 int syntax(char **argv);
 void error(char *argv);
@@ -19,6 +20,7 @@ void main(int argc, char *argv[]){
 
 	FILE *file_in, *file_out;
 
+	int key = 0;
 	int opt = syntax((argv));
 
 	switch(opt){
@@ -40,7 +42,12 @@ void main(int argc, char *argv[]){
 				exit(1);
 			}
 
-			encrypt(file_in, file_out);
+			key = convertInt(argv[3]);
+
+			printf("key:%d\n", key);
+
+			encrypt(file_in, key, file_out);
+			
 			fclose(file_in);
 			fclose(file_out);
 			file_in = NULL;
@@ -58,16 +65,29 @@ void main(int argc, char *argv[]){
 
 }
 
-void encrypt(FILE *in, FILE *out){
+int convertInt(char *argv){
+
+	return (*argv) - 48;
+
+}
+
+void encrypt(FILE *in, int key,FILE *out){
 
 	char aux;
 
-	printf("============ENCRYPT============\n");
-	printf("%p \n", in);
-
+	printf("============ENCRYPT============ %d\n", key);
+	
 	while( !(feof(in)) ){
-	//	fscanf(in, "%s", stdin);
-	//	printf("%s \n", stdin);
+		fscanf(in, "%c", &aux);
+		printf("[%c %d]\n", aux, aux);
+
+		if( (aux > 64) && (aux < 91)){ //Uppercase
+
+		}else if( (aux > 97) && (aux < 123)){
+
+		}
+
+		fprintf(out, "%c", aux);
 	}
 }
 
