@@ -44,8 +44,6 @@ void main(int argc, char *argv[]){
 
 			key = convertInt(argv[3]);
 
-			printf("key:%d\n", key);
-
 			encrypt(file_in, key, file_out);
 			
 			fclose(file_in);
@@ -71,20 +69,28 @@ int convertInt(char *argv){
 
 }
 
-void encrypt(FILE *in, int key,FILE *out){
+void encrypt(FILE *in, int key, FILE *out){
 
 	char aux;
 
-	printf("============ENCRYPT============ %d\n", key);
-	
 	while( !(feof(in)) ){
+
 		fscanf(in, "%c", &aux);
-		printf("[%c %d]\n", aux, aux);
 
 		if( (aux > 64) && (aux < 91)){ //Uppercase
 
-		}else if( (aux > 97) && (aux < 123)){
+			aux = aux + key;
 
+			while(aux > 90)
+				aux -= 26;
+
+		}else if( (aux > 96) && (aux < 123)){ //Downcase
+
+			aux = aux + key;
+
+			while(aux > 122)
+				aux -= 26;
+			printf("=> %d\n", aux);
 		}
 
 		fprintf(out, "%c", aux);
