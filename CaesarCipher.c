@@ -3,6 +3,7 @@
 #include <string.h>
 
 int convertInt(char *argv);
+int simplifyNumber(int n);
 void encrypt(FILE *in, int key, FILE *out);
 void decrypt(FILE *in, int key, FILE *out);
 int isNumber(char *argv);
@@ -44,6 +45,12 @@ void main(int argc, char *argv[]){
 			}
 
 			key = convertInt(argv[3]);
+
+			printf("N = %d\n", key);
+
+			key = simplifyNumber(key);
+
+			printf("Ndps = %d\n", key);
 
 			encrypt(file_in, key, file_out);
 			
@@ -109,6 +116,18 @@ int convertInt(char *argv){
 
 }
 
+int simplifyNumber(int n){
+
+	printf("Siply= %d", n);
+
+	while(n > 26)
+		n -= 26;
+
+	printf("Siply= %d", n);
+	return n;
+	
+}
+
 void encrypt(FILE *in, int key, FILE *out){
 
 	char aux;
@@ -126,14 +145,23 @@ void encrypt(FILE *in, int key, FILE *out){
 
 		}else if( (aux > 96) && (aux < 123)){ //Downcase
 
+			printf("Char: ant %d", aux);
+
 			aux = aux + key;
 
+			printf(" dps %d\n", aux);
+
 			while( (aux > 122) || (aux < 0) ){
+				
+				printf("WhileIN: %d \n", aux);
 
 				if(aux < 0)
 					aux = aux * -1;
 
 				aux -= 26;
+
+				printf("WhileOUT: %d \n", aux);
+
 			}
 		}
 
