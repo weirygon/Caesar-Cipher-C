@@ -4,6 +4,7 @@
 
 int convertInt(char *argv);
 void encrypt(FILE *in, int key, FILE *out);
+void decrypt(FILE *in, int key, FILE *out);
 int isNumber(char *argv);
 int syntax(char **argv);
 void error(char *argv);
@@ -55,6 +56,29 @@ void main(int argc, char *argv[]){
 
 		case 2:
 			printf("[+]Decrypt...\n");
+			file_in = fopen(argv[4], "r");
+			
+			if(!file_in){
+				printf("[-]The file %s cannot be open!\n", argv[4]);
+				exit(1);
+			}
+
+			file_out = fopen(argv[5], "w");
+
+			if(!file_out){
+				printf("[-] The file %s cannot be create!\n", argv[5]);
+				exit(1);
+			}
+
+			key = convertInt(argv[3]);
+
+			decrypt(file_in, key, file_out);
+			
+			fclose(file_in);
+			fclose(file_out);
+			file_in = NULL;
+			file_out = NULL;
+
 		break;
 
 		default:
@@ -70,6 +94,8 @@ int convertInt(char *argv){
 }
 
 void encrypt(FILE *in, int key, FILE *out){
+
+	printf("Key = %d", key);
 
 	char aux;
 
@@ -101,6 +127,36 @@ void encrypt(FILE *in, int key, FILE *out){
 	}
 }
 
+void decrypt(FILE *in, int key, FILE *out){
+
+	char aux;
+
+	while( !(feof(in)) ){
+
+		fscanf(in, "%c", &aux);
+
+		if( (aux > 64) && (aux < 91)){ //Uppercase
+
+			aux = aux - key;
+
+			while(aux < 65)
+				aux += 26;
+
+		}else if( (aux > 96) && (aux < 123)){ //Downcase
+
+			aux = aux - key;
+
+			while( (aux < 97) ){
+
+				aux += 26;
+			}
+		}
+
+		fprintf(out, "%c", aux);
+	}
+
+}
+
 int isNumber(char *argv){
 
 	for(int i=0; argv[i]!= 0; i++){
@@ -128,7 +184,7 @@ int syntax(char **argv){
 			if(isNumber(argv[3]))
 				return 1;
 			else
-				return 0;
+				return -1;
 
 		}
 	
@@ -137,9 +193,9 @@ int syntax(char **argv){
 		if( !(strcmp(argv[2], "-k")) || !(strcmp(argv[2], "-n"))){
 
 			if(isNumber(argv[3]))
-				return 1;
+				return 2;
 			else
-				return 0;
+				return -1;
 
 		}
 
