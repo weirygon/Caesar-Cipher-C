@@ -87,16 +87,14 @@ void encrypt(FILE *in, int key, FILE *out){
 		}else if( (aux > 96) && (aux < 123)){ //Downcase
 
 			aux = aux + key;
-			printf("Aux = %d", aux);
-			while(aux > 122 || aux < 0 ){
-				printf("\nWhile = %d\n", aux);
+
+			while( (aux > 122) || (aux < 0) ){
 
 				if(aux < 0)
 					aux = aux * -1;
 
 				aux -= 26;
 			}
-			printf("=> %d\n", aux);
 		}
 
 		fprintf(out, "%c", aux);
