@@ -89,13 +89,27 @@ void main(int argc, char *argv[]){
 
 int convertInt(char *argv){
 
-	return (*argv) - 48;
+	int aux = 0;
+
+	for(int i=0; argv[i] != 0; i++){
+
+		argv[i] =argv[i] - 48;
+
+		if(!i)	//i == 0
+			aux = argv[i];
+		else{
+			
+			aux = aux * 10;
+			aux = aux + argv[i];
+
+		}
+	}
+	
+	return aux;
 
 }
 
 void encrypt(FILE *in, int key, FILE *out){
-
-	printf("Key = %d", key);
 
 	char aux;
 
