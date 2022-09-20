@@ -27,15 +27,16 @@ void main(int argc, char *argv[]){
 
 	switch(opt){
 		case 1:
-
-			printf("[+]Encypt...\n");
+		
+			printf("[*] Opening file %s...\n", argv[4]);
 			file_in = fopen(argv[4], "r");
-			
+
 			if(!file_in){
-				printf("[-]The file %s cannot be open!\n", argv[4]);
+				printf("[-] The file %s cannot be open!\n", argv[4]);
 				exit(1);
 			}
 
+			printf("[*] Creating file %s...\n", argv[5]);
 			file_out = fopen(argv[5], "w");
 
 			if(!file_out){
@@ -47,6 +48,7 @@ void main(int argc, char *argv[]){
 			key = convertInt(argv[3]);
 			key = simplifyNumber(key);
 
+			printf("[+] Encypt...\n");
 			encrypt(file_in, key, file_out);
 			
 			fclose(file_in);
@@ -54,10 +56,12 @@ void main(int argc, char *argv[]){
 			file_in = NULL;
 			file_out = NULL;
 
+			printf("[+] Finish!\n");
+
 		break;
 
 		case 2:
-			printf("[+]Decrypt...\n");
+			printf("[*] Opening file %s...\n", argv[4]);
 			file_in = fopen(argv[4], "r");
 			
 			if(!file_in){
@@ -65,6 +69,7 @@ void main(int argc, char *argv[]){
 				exit(1);
 			}
 
+			printf("[*] Creating file %s...\n", argv[5]);
 			file_out = fopen(argv[5], "w");
 
 			if(!file_out){
@@ -73,13 +78,17 @@ void main(int argc, char *argv[]){
 			}
 
 			key = convertInt(argv[3]);
+			key = simplifyNumber(key);
 
+			printf("[+] Decrypt...\n");
 			decrypt(file_in, key, file_out);
 			
 			fclose(file_in);
 			fclose(file_out);
 			file_in = NULL;
 			file_out = NULL;
+
+			printf("[+] Finish!\n");
 
 		break;
 
@@ -167,17 +176,16 @@ void decrypt(FILE *in, int key, FILE *out){
 
 			aux = aux - key;
 
-			while(aux < 65)
+			if(aux < 65)
 				aux += 26;
 
 		}else if( (aux > 96) && (aux < 123)){ //Downcase
 
 			aux = aux - key;
 
-			while( (aux < 97) ){
-
+			if(aux < 97)
 				aux += 26;
-			}
+			
 		}
 
 		fprintf(out, "%c", aux);
